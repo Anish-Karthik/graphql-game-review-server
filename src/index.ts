@@ -1,6 +1,10 @@
-import { ApolloServer } from "@apollo/server";
-import { startStandaloneServer } from "@apollo/server/standalone";
+import cors from "cors";
+import express, { json } from "express";
 import { prisma } from "./db";
+
+import { ApolloServer } from "@apollo/server";
+import { expressMiddleware } from "@apollo/server/express4";
+import { buildSubgraphSchema } from "@apollo/subgraph";
 import { Context } from "./graphql/context";
 import { resolvers } from "./graphql/resolvers";
 import { typeDefs } from "./graphql/schema";
@@ -8,22 +12,36 @@ import { typeDefs } from "./graphql/schema";
 // definition and your set of resolvers.
 
 // fillSampleData();
-
-
+const PORT = process.env.PORT || 4000;
+const app = express();
 
 const server = new ApolloServer<Context>({
-  typeDefs,
-  resolvers,
+  schema: buildSubgraphSchema({ typeDefs, resolvers }),
+});
+// Note you must call `start()` on the `ApolloServer`
+// instance before passing the instance to `expressMiddleware`
+await server.start();
+
+app.use(
+  '/graphql',
+  cors(),
+  json(),
+  expressMiddleware(server, {
+    context: async ({ req, res }) => ({ req, res, prisma }),
+  }),
+);
+
+app.get("/", (req, res) => {
+  res.send("Hello World!");
 });
 
-// Passing an ApolloServer instance to the `startStandaloneServer` function:
-//  1. creates an Express app
-//  2. installs your ApolloServer instance as middleware
-//  3. prepares your app to handle incoming requests
-
-const { url } = await startStandaloneServer<Context>(server, {
-  context: async ({ req, res }) => ({ req, res, prisma }),
-  listen: { port: 4000 },
+app.listen(PORT, () => {
+  console.log(`Server is running on port: ${PORT}`);
 });
 
-console.log(`🚀  Server ready at: ${url}`);
+// const { url } = await startStandaloneServer<Context>(server, {
+//   context: async ({ req, res }) => ({ req, res, prisma }),
+//   listen: { port: 4000 },
+// });
+
+// console.log(`🚀  Server ready at: ${url}`);

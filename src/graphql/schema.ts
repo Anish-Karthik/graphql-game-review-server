@@ -1,4 +1,6 @@
-export const typeDefs = `#graphql
+import gql from "graphql-tag";
+
+export const typeDefs = gql`
   enum Platform {
     PC
     Xbox
