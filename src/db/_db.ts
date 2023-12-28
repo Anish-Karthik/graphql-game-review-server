@@ -1,5 +1,7 @@
+import { Game } from "@prisma/client";
 
-let games = [
+
+let games: Game[] = [
   {
     id: "1",
     name: "The Lord of the Rings",

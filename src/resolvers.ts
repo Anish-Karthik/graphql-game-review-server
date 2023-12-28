@@ -1,96 +1,163 @@
-import { db } from "./_db";
+import { Context } from ".";
+import { Author, Game, Review } from "@prisma/client";
+
+export const gameMutations = {
+  addGame: async (_parent: any, args: { game: Game }, context: Context) => {
+    return await context.prisma.game.create({
+      data: {
+        name: args.game.name,
+        description: args.game.description,
+        price: args.game.price,
+        company: args.game.company,
+        platform: args.game.platform,
+      },
+    })
+  },
+  deleteGame: async (_parent: any, args: { id: string }, context: Context) => {
+    return await context.prisma.game.delete({
+      where: {
+        id: args.id,
+      },
+    })
+  },
+  updateGame: async (_parent: any, args: { id: string, game: Partial<Game> }, context: Context) => {
+    return await context.prisma.game.update({
+      where: {
+        id: args.id,
+      },
+      data: {
+        name: args.game.name,
+        description: args.game.description,
+        price: args.game.price,
+        company: args.game.company,
+        platform: args.game.platform,
+      },
+    })
+  },
+}
 
 export const resolvers = {
   Query: {
-    games: () => db.games,
-    game: (_parent: any, { id }: any) => db.games.find((game) => game.id === id),
-    authors: () => db.authors,
-    author: (_parent: any, { id }: any) => db.authors.find((author) => author.id === id),
-    reviews: () => db.reviews,
-    review: (_parent: any, { id }: any) => db.reviews.find((review) => review.id === id),
+    games: async (_parent: any, _args: any, context: Context) => {
+      return await context.prisma.game.findMany({});
+    },
+    game: async (_parent: any, args: any, context: Context) => {
+      return await context.prisma.game.findUnique({
+        where: {
+          id: args.id,
+        },
+      })
+    },
+    authors: async (_parent: any, _args: any, context: Context) => {
+      return await context.prisma.author.findMany({});
+    },
+    author: async (_parent: any, args: any, context: Context) => {
+      return await context.prisma.author.findUnique({
+        where: {
+          id: args.id,
+        },
+      })
+    },
+    reviews: async (_parent: any, _args: any, context: Context) => {
+      return await context.prisma.review.findMany({});
+    },
+    review: async (_parent: any, args: any, context: Context) => {
+      return await context.prisma.review.findUnique({
+        where: {
+          id: args.id,
+        },
+      })
+    },
   },
   Game: {
-    reviews: (parent: any) => db.reviews.filter((review) => review.game_id === parent.id),
+    reviews: async (parent: any, _args: any, context: Context) => {
+      return await context.prisma.review.findMany({
+        where: {
+          gameId: parent.id,
+        },
+      })
+    },
   },
   Author: {
-    reviews: (parent: any) => db.reviews.filter((review) => review.author_id === parent.id),
+    reviews: async (parent: any, _args: any, context: Context) => {
+      return await context.prisma.review.findMany({
+        where: {
+          authorId: parent.id,
+        },
+      })
+    },
   },
   Review: {
-    game: (parent: any) => db.games.find((game) => game.id === parent.game_id),
-    author: (parent: any) => db.authors.find((author) => author.id === parent.author_id),
+    game: async (parent: any, _args: any, context: Context) => {
+      return await context.prisma.game.findUnique({
+        where: {
+          id: parent.gameId,
+        },
+      })
+    },
+    author: async (parent: any, _args: any, context : Context) => {
+      return await context.prisma.author.findUnique({
+        where: {
+          id: parent.authorId,
+        },
+      })
+    }
   },
   Mutation: {
-    addGame: (_parent: any, { game }: any) => {
-      const newGame = {
-        id: String(Math.floor(Math.random() * 100000)),
-        ...game,
-      };
-      db.games.push(newGame);
-      return newGame;
+    ...gameMutations,
+    addAuthor: async (_parent: any, args: { author: Author }, context: Context) => {
+      return await context.prisma.author.create({
+        data: {
+          name: args.author.name,
+          verified: args.author.verified,
+        },
+      })
     },
-    deleteGame: (_parent: any, { id }: any) => {
-      const gameIndex = db.games.findIndex((game) => game.id === id);
-      if (gameIndex === -1) throw new Error("Game not found");
-      const deletedGame = db.games.splice(gameIndex, 1)[0];
-      return deletedGame;
+    deleteAuthor: async (_parent: any, args: { id: string }, context: Context) => {
+      return await context.prisma.author.delete({
+        where: {
+          id: args.id,
+        },
+      })
     },
-    updateGame: (_parent: any, { id, game }: any) => {
-      const gameIndex = db.games.findIndex((game) => game.id === id);
-      if (gameIndex === -1) throw new Error("Game not found");
-      const updatedGame = {
-        ...db.games[gameIndex],
-        ...game,
-      };
-      db.games[gameIndex] = updatedGame;
-      return updatedGame;
+    updateAuthor: async (_parent: any, args: { id: string, author: Partial<Author> }, context: Context) => {
+      return await context.prisma.author.update({
+        where: {
+          id: args.id,
+        },
+        data: {
+          name: args.author.name,
+          verified: args.author.verified,
+        },
+      })
     },
-    addReview: (_parent: any, { review }: any) => {
-      const newReview = {
-        id: String(Math.floor(Math.random() * 100000)),
-        ...review,
-      };
-      db.reviews.push(newReview);
-      return newReview;
+    addReview: async (_parent: any, args: { review: Review } , context: Context) => {
+      return await context.prisma.review.create({
+        data: {
+          content: args.review.content,
+          rating: args.review.rating,
+          authorId: args.review.authorId,
+          gameId: args.review.gameId,
+        },
+      })
     },
-    deleteReview: (_parent: any, { id }: any) => {
-      const reviewIndex = db.reviews.findIndex((review) => review.id === id);
-      if (reviewIndex === -1) throw new Error("Review not found");
-      const deletedReview = db.reviews.splice(reviewIndex, 1)[0];
-      return deletedReview;
+    deleteReview: async (_parent: any, args: { id: string }, context: Context) => {
+      return await context.prisma.review.delete({
+        where: {
+          id: args.id,
+        },
+      })
     },
-    updateReview: (_parent: any, { id, review }: any) => {
-      const reviewIndex = db.reviews.findIndex((review) => review.id === id);
-      if (reviewIndex === -1) throw new Error("Review not found");
-      const updatedReview = {
-        ...db.reviews[reviewIndex],
-        ...review,
-      };
-      db.reviews[reviewIndex] = updatedReview;
-      return updatedReview;
-    },
-    addAuthor: (_parent: any, { author }: any) => {
-      const newAuthor = {
-        id: String(Math.floor(Math.random() * 100000)),
-        ...author,
-      };
-      db.authors.push(newAuthor);
-      return newAuthor;
-    },
-    deleteAuthor: (_parent: any, { id }: any) => {
-      const authorIndex = db.authors.findIndex((author) => author.id === id);
-      if (authorIndex === -1) throw new Error("Author not found");
-      const deletedAuthor = db.authors.splice(authorIndex, 1)[0];
-      return deletedAuthor;
-    },
-    updateAuthor: (_parent: any, { id, author }: any) => {
-      const authorIndex = db.authors.findIndex((author) => author.id === id);
-      if (authorIndex === -1) throw new Error("Author not found");
-      const updatedAuthor = {
-        ...db.authors[authorIndex],
-        ...author,
-      };
-      db.authors[authorIndex] = updatedAuthor;
-      return updatedAuthor;
+    updateReview: async (_parent: any, args: { id: string, review: Partial<Review> }, context: Context) => {
+      return await context.prisma.review.update({
+        where: {
+          id: args.id,
+        },
+        data: {
+          content: args.review.content,
+          rating: args.review.rating,
+        },
+      })
     },
   }
 };

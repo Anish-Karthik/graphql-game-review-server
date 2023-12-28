@@ -1,11 +1,20 @@
 export const typeDefs = `#graphql
+  enum Platform {
+    PC
+    Xbox
+    Playstation
+    Nintendo
+    Android
+    IOS
+    Other
+  }
   type Game {
     id: ID!
     name: String!
     description: String!
     price: Float!
     company: String!
-    platform: [String!]!
+    platform: [Platform!]!
     reviews: [Review!]
   }
   type Review {
@@ -30,24 +39,31 @@ export const typeDefs = `#graphql
     review(id: ID!): Review!
   }
   type Mutation {
-    addGame(game: GameInput!): Game!
+    addGame(game: AddGameInput!): Game!
     deleteGame(id: ID!): Game!
-    updateGame(id: ID!, game: GameInput!): Game!
-    addReview(review: ReviewInput!): Review!
+    updateGame(id: ID!, game: UpdateGameInput!): Game!
+    addReview(review: AddReviewInput!): Review!
     deleteReview(id: ID!): Review!
     updateReview(id: ID!, review: UpdateReviewInput!): Review!
-    addAuthor(author: AuthorInput!): Author!
+    addAuthor(author: AddAuthorInput!): Author!
     deleteAuthor(id: ID!): Author!
-    updateAuthor(id: ID!, author: AuthorInput!): Author!
+    updateAuthor(id: ID!, author: UpdateAuthorInput!): Author!
   }
-  input GameInput {
+  input AddGameInput {
     name: String!
     description: String!
     price: Float!
     company: String!
     platform: [String!]!
   }
-  input ReviewInput {
+  input UpdateGameInput {
+    name: String
+    description: String
+    price: Float
+    company: String
+    platform: [String!]
+  }
+  input AddReviewInput {
     rating: Int!
     content: String!
     game_id: ID!
@@ -57,8 +73,12 @@ export const typeDefs = `#graphql
     rating: Int
     content: String
   }
-  input AuthorInput {
+  input AddAuthorInput {
     name: String!
     verified: Boolean!
+  }
+  input UpdateAuthorInput {
+    name: String
+    verified: Boolean
   }
 `

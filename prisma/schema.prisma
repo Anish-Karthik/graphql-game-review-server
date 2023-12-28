@@ -1,0 +1,48 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Platform {
+  PC
+  Xbox
+  Playstation
+  Nintendo
+  Android
+  IOS
+  Other
+}
+
+model Game {
+  id          String      @id @default (uuid ()) @db.Uuid
+  name        String
+  description String
+  price       Float
+  company     String
+  platform    Platform[]
+  reviews     Review[]
+}
+
+model Review {
+  id      String    @id @default (uuid ()) @db.Uuid
+  rating  Int
+  content String
+  game    Game   @relation(fields: [gameId], references: [id])
+  gameId  String @db.Uuid
+  author  Author @relation(fields: [authorId], references: [id])
+  authorId String @db.Uuid
+}
+
+model Author {
+  id       String      @id @default (uuid ()) @db.Uuid
+  name     String
+  verified Boolean
+  reviews  Review[]
+}
