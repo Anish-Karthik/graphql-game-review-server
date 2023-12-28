@@ -81,4 +81,4 @@ export const typeDefs = `#graphql
     name: String
     verified: Boolean
   }
-`
+`;

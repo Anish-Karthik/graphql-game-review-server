@@ -1,17 +1,15 @@
 import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
-import { typeDefs } from "./schema";
-import { resolvers } from "./resolvers";
-import { fillSampleData, prisma } from "./db";
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "./db";
+import { Context } from "./graphql/context";
+import { resolvers } from "./graphql/resolvers";
+import { typeDefs } from "./graphql/schema";
 // The ApolloServer constructor requires two parameters: your schema
 // definition and your set of resolvers.
 
 // fillSampleData();
 
-export type Context = {
-  prisma: PrismaClient;
-};
+
 
 const server = new ApolloServer<Context>({
   typeDefs,
