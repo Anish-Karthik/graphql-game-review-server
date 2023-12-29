@@ -73,8 +73,8 @@ export const typeDefs = gql`
   input AddReviewInput {
     rating: Int!
     content: String!
-    game_id: ID!
-    author_id: ID!
+    gameId: ID!
+    authorId: ID!
   }
   input UpdateReviewInput {
     rating: Int
