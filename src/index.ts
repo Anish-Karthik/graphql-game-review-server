@@ -11,7 +11,7 @@ import { typeDefs } from "./graphql/schema";
 // The ApolloServer constructor requires two parameters: your schema
 // definition and your set of resolvers.
 
-fillSampleData();
+// fillSampleData();
 const PORT = process.env.PORT || 4000;
 const app = express();
 
