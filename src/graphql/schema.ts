@@ -14,6 +14,7 @@ export const typeDefs = gql`
     id: ID!
     name: String!
     description: String!
+    image: String!
     price: Float!
     company: String!
     platform: [Platform!]!
@@ -29,6 +30,8 @@ export const typeDefs = gql`
   type Author {
     id: ID!
     name: String!
+    userId: String!
+    image: String!
     verified: Boolean!
     reviews: [Review!]
   }
@@ -54,6 +57,7 @@ export const typeDefs = gql`
   input AddGameInput {
     name: String!
     description: String!
+    image: String!
     price: Float!
     company: String!
     platform: [String!]!
@@ -61,6 +65,7 @@ export const typeDefs = gql`
   input UpdateGameInput {
     name: String
     description: String
+    image: String
     price: Float
     company: String
     platform: [String!]
@@ -76,11 +81,14 @@ export const typeDefs = gql`
     content: String
   }
   input AddAuthorInput {
+    userId: String!
     name: String!
+    image: String!
     verified: Boolean!
   }
   input UpdateAuthorInput {
     name: String
+    image: String
     verified: Boolean
   }
 `;

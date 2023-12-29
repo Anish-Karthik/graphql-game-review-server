@@ -7,6 +7,7 @@ export const gameMutations = {
       data: {
         name: args.game.name,
         description: args.game.description,
+        image: args.game.image,
         price: args.game.price,
         company: args.game.company,
         platform: args.game.platform,
@@ -32,6 +33,7 @@ export const gameMutations = {
       data: {
         name: args.game.name,
         description: args.game.description,
+        image: args.game.image,
         price: args.game.price,
         company: args.game.company,
         platform: args.game.platform,

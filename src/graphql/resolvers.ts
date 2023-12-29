@@ -6,7 +6,7 @@ export const resolvers = {
     games: async (_parent: any, _args: any, context: Context) => {
       return await context.prisma.game.findMany({});
     },
-    game: async (_parent: any, args: any, context: Context) => {
+    game: async (_parent: any, args: { id: string }, context: Context) => {
       return await context.prisma.game.findUnique({
         where: {
           id: args.id,
@@ -16,7 +16,15 @@ export const resolvers = {
     authors: async (_parent: any, _args: any, context: Context) => {
       return await context.prisma.author.findMany({});
     },
-    author: async (_parent: any, args: any, context: Context) => {
+    author: async (_parent: any, args: { id: string }, context: Context) => {
+      // check if id is from clerk
+      if (args.id.includes("user_")) {
+        return await context.prisma.author.findUnique({
+          where: {
+            userId: args.id,
+          },
+        });
+      }
       return await context.prisma.author.findUnique({
         where: {
           id: args.id,
@@ -26,7 +34,7 @@ export const resolvers = {
     reviews: async (_parent: any, _args: any, context: Context) => {
       return await context.prisma.review.findMany({});
     },
-    review: async (_parent: any, args: any, context: Context) => {
+    review: async (_parent: any, args: { id: string }, context: Context) => {
       return await context.prisma.review.findUnique({
         where: {
           id: args.id,

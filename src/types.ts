@@ -1,0 +1,1 @@
+export { Game, Author, Review, Platform } from '@prisma/client';

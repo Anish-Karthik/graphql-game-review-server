@@ -21,9 +21,10 @@ enum Platform {
 }
 
 model Game {
-  id          String      @id @default (uuid ()) @db.Uuid
+  id          String     @id @default(uuid()) @db.Uuid
   name        String
   description String
+  image       String
   price       Float
   company     String
   platform    Platform[]
@@ -31,17 +32,19 @@ model Game {
 }
 
 model Review {
-  id      String    @id @default (uuid ()) @db.Uuid
-  rating  Int
-  content String
-  game    Game   @relation(fields: [gameId], references: [id])
-  gameId  String @db.Uuid
-  author  Author @relation(fields: [authorId], references: [id])
+  id       String @id @default(uuid()) @db.Uuid
+  rating   Int
+  content  String
+  game     Game   @relation(fields: [gameId], references: [id])
+  gameId   String @db.Uuid
+  author   Author @relation(fields: [authorId], references: [id])
   authorId String @db.Uuid
 }
 
 model Author {
-  id       String      @id @default (uuid ()) @db.Uuid
+  id       String   @id @default(uuid()) @db.Uuid
+  userId   String   @unique
+  image    String
   name     String
   verified Boolean
   reviews  Review[]

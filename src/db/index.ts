@@ -15,6 +15,7 @@ export async function fillSampleData() {
       data: {
         name: game.name,
         description: game.description,
+        image: game.image,
         price: game.price,
         company: game.company,
         platform: game.platform,
@@ -22,38 +23,38 @@ export async function fillSampleData() {
     }))
   }
   // exclude id from author objects
-  const authors: Author[] = []
-  for (const author of db.authors) {
-    authors.push(await prisma.author.create({
-      data: {
-        name: author.name,
-        verified: author.verified,
-      }
-    }))
-  }
-  // exclude id from review objects
-  console.log(games)
-  console.log(authors)
-  for (const review of db.reviews) {
-    await prisma.review.create({
-      data: {
-        content: review.content,
-        rating: review.rating,
-        author: {
-          connect: {
-            id: authors[Number(review.author_id) - 1].id,
-          }
-        },
-        game: {
-          connect: {
-            id: games[Number(review.game_id) - 1].id,
-          }
-        }
-      }
-    })
-  }
+  // const authors: Author[] = []
+  // for (const author of db.authors) {
+  //   authors.push(await prisma.author.create({
+  //     data: {
+  //       name: author.name,
+  //       verified: author.verified,
+  //     }
+  //   }))
+  // }
+  // // exclude id from review objects
+  // console.log(games)
+  // console.log(authors)
+  // for (const review of db.reviews) {
+  //   await prisma.review.create({
+  //     data: {
+  //       content: review.content,
+  //       rating: review.rating,
+  //       author: {
+  //         connect: {
+  //           id: authors[Number(review.author_id) - 1].id,
+  //         }
+  //       },
+  //       game: {
+  //         connect: {
+  //           id: games[Number(review.game_id) - 1].id,
+  //         }
+  //       }
+  //     }
+  //   })
+  // }
 
-  const reviews = await prisma.review.findMany({})
+  // const reviews = await prisma.review.findMany({})
 
-  console.log(reviews)
+  // console.log(reviews)
 }

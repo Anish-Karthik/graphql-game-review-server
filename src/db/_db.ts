@@ -6,6 +6,7 @@ let games: Game[] = [
     name: "The Lord of the Rings",
     description:
       "The Lord of the Rings is an epic high-fantasy novel written by English author and scholar J. R. R. Tolkien.",
+    image: "https://picsum.photos/700/700",
     price: 10.99,
     platform: ["PC", "Xbox", "Playstation"],
     company: "EA",
@@ -15,6 +16,7 @@ let games: Game[] = [
     name: "Harry Potter",
     description:
       "Harry Potter is a series of seven fantasy novels written by British author J. K. Rowling.",
+    image: "https://picsum.photos/700/700",
     price: 9.99,
     platform: ["PC", "Xbox", "Playstation"],
     company: "EA",
@@ -24,6 +26,7 @@ let games: Game[] = [
     name: "A Song of Ice and Fire",
     description:
       "A Song of Ice and Fire is a series of epic fantasy novels by the American novelist and screenwriter George R. R. Martin.",
+    image: "https://picsum.photos/700/700",
     price: 8.99,
     platform: ["PC", "Xbox", "Playstation"],
     company: "EA",
@@ -33,6 +36,7 @@ let games: Game[] = [
     name: "The Stand",
     description:
       "The Stand is a post-apocalyptic dark fantasy novel written by American author Stephen King.",
+    image: "https://picsum.photos/700/700",
     price: 7.99,
     platform: ["PC", "Xbox", "Playstation"],
     company: "EA",
@@ -42,6 +46,7 @@ let games: Game[] = [
     name: "The Catcher in the Rye",
     description:
       "The Catcher in the Rye is a novel by J. D. Salinger, partially published in serial form in 1945–1946 and as a novel in 1951.",
+    image: "https://picsum.photos/700/700",
     price: 6.99,
     platform: ["PC", "Xbox", "Playstation"],
     company: "EA",
